@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matomo.fullname" . }}
+  labels:
+{{ include "matomo.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matomo.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "matomo.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            requests:
+              cpu: "{{ .Values.resources.matomo.requests.cpu }}"
+              memory: "{{ .Values.resources.matomo.requests.memory }}"
+            limits:
+              cpu: "{{ .Values.resources.matomo.limits.cpu }}"
+              memory: "{{ .Values.resources.matomo.limits.memory }}"
+          env:
+            - name: MARIADB_HOST
+              value: "{{ .Release.Name }}-mariadb"
+            - name: MARIADB_PORT_NUMBER
+              value: {{ .Values.mariadb.service.port | quote }}
+            - name: MATOMO_DATABASE_NAME
+              value: {{ .Values.mariadb.db.name | quote }}
+            - name: MATOMO_DATABASE_USER
+              value: {{ .Values.mariadb.db.user | quote }}
+            - name: MATOMO_DATABASE_PASSWORD
+              value: {{ .Values.mariadb.db.password | quote }}
+            - name: MATOMO_USERNAME
+              value: {{ .Values.matomo.username | quote }}
+            - name: MATOMO_HOST
+              value: {{ .Values.matomo.host | quote }}
+            - name: MATOMO_PASSWORD
+              value: {{ .Values.matomo.password | quote }}
+            - name: MATOMO_WEBSITE_NAME
+              value: {{ .Values.matomo.websiteName | quote }}
+            - name: MATOMO_WEBSITE_HOST
+              value: {{ .Values.matomo.websiteHost | quote }}
+            - name: MATOMO_ENABLE_PROXY_URI_HEADER
+              value: {{ .Values.matomo.enabledProxyUriHeader | quote }}
+            - name: MATOMO_EMAIL
+              value: {{ .Values.matomo.email | quote }}
+            - name: SMTP_HOST
+              value: {{ .Values.smtp.host | quote }}
+            - name: SMTP_PORT
+              value: {{ .Values.smtp.port | quote }}
+            - name: SMTP_USER
+              value: {{ .Values.smtp.user | quote }}
+            - name: SMTP_PASSWORD
+              value: {{ .Values.smtp.password | quote }}
+            - name: SMTP_PROTOCOL
+              value: {{ .Values.smtp.protocol | quote }}
+            - name: SMTP_AUTH # "Plain", "Login", "Crammd5".
+              value: {{ .Values.smtp.auth | quote }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

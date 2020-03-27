@@ -1,0 +1,81 @@
+# Default values for matomo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: bitnami/matomo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+matomo:
+  host: 127.0.0.1
+  websiteName: Matomo in Docker
+  websiteHost: example-matomo.com
+  enabledProxyUriHeader: 'yes' # yes or no
+  email: example@domain.com
+  username: admin
+  password: password
+
+smtp:
+  host: example-matomo.com
+  port: 25
+  user: user
+  password: password
+  protocol: 'ssl'
+  auth: 'Plain' # "Plain", "Login", "Crammd5".
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  matomo:
+    requests:
+      cpu: 1
+      memory: "512M"
+    limits:
+      cpu: 1
+      memory: "750M"
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+mariadb:
+  master:
+    persistence:
+      enabled: false
+  slave:
+    persistence:
+      enabled: false
+  db:
+    name: matomo_db
+    user: matomo_user
+    password: matomo_password
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
