@@ -52,10 +52,10 @@ ingress:
 resources:
   matomo:
     requests:
-      memory: "512M"
+      memory: 512Mi
     limits:
       cpu: 1
-      memory: "750M"
+      memory: 750Mi
 nodeSelector: {}
 
 tolerations: []
