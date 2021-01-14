@@ -52,6 +52,7 @@ ingress:
 resources:
   matomo:
     requests:
+      cpu: 100m
       memory: 512Mi
     limits:
       cpu: 1
