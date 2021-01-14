@@ -13,7 +13,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-
 matomo:
   host: 127.0.0.1
   websiteName: Matomo in Docker
@@ -22,6 +21,11 @@ matomo:
   email: example@domain.com
   username: admin
   password: password
+  databaseHost: localhost
+  databasePort: 3306
+  databaseName: matomo
+  databaseUsername: matomo_user
+  databasePassword: matomo_password
 
 smtp:
   host: example-matomo.com
@@ -52,7 +56,6 @@ ingress:
 resources:
   matomo:
     requests:
-      cpu: 1
       memory: "512M"
     limits:
       cpu: 1
@@ -62,20 +65,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-mariadb:
-  master:
-    persistence:
-      enabled: false
-  slave:
-    persistence:
-      enabled: false
-  db:
-    name: matomo_db
-    user: matomo_user
-    password: matomo_password
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: monitoring
