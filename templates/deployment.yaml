@@ -45,15 +45,15 @@ spec:
               memory: "{{ .Values.resources.matomo.limits.memory }}"
           env:
             - name: MARIADB_HOST
-              value: "{{ .Release.Name }}-mariadb"
+              value: {{ .Values.matomo.databaseHost | quote }}
             - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.mariadb.service.port | quote }}
+              value: {{ .Values.matomo.databasePort | quote }}
             - name: MATOMO_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ .Values.matomo.databaseName | quote }}
             - name: MATOMO_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ .Values.matomo.databaseUsername | quote }}
             - name: MATOMO_DATABASE_PASSWORD
-              value: {{ .Values.mariadb.db.password | quote }}
+              value: {{ .Values.matomo.databasePassword | quote }}
             - name: MATOMO_USERNAME
               value: {{ .Values.matomo.username | quote }}
             - name: MATOMO_HOST
