@@ -44,10 +44,10 @@ spec:
               cpu: "{{ .Values.resources.matomo.limits.cpu }}"
               memory: "{{ .Values.resources.matomo.limits.memory }}"
           env:
-            - name: MARIADB_HOST
-              value: {{ .Values.matomo.databaseHost | quote }}
-            - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.matomo.databasePort | quote }}
+            - name: MATOMO_DATABASE_HOST
+              value: {{ .Values.matomo.databaseHost }}
+            - name: MATOMO_DATABASE_PORT_NUMBER
+              value: {{ .Values.matomo.databasePort }}
             - name: MATOMO_DATABASE_NAME
               value: {{ .Values.matomo.databaseName | quote }}
             - name: MATOMO_DATABASE_USER
