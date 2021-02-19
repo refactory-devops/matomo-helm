@@ -45,7 +45,7 @@ spec:
               memory: "{{ .Values.resources.matomo.limits.memory }}"
           env:
             - name: MATOMO_DATABASE_HOST
-              value: {{ .Values.matomo.databaseHost }}
+              value: {{ .Values.matomo.databaseHost | quote }}
             - name: MATOMO_DATABASE_PORT_NUMBER
               value: {{ .Values.matomo.databasePort }}
             - name: MATOMO_DATABASE_NAME
