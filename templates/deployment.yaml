@@ -81,7 +81,7 @@ spec:
             - name: SMTP_AUTH # "Plain", "Login", "Crammd5".
               value: {{ .Values.smtp.auth | quote }}
         - name: cloudsql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.16
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
           command: ["/cloud_sql_proxy",
                     "-instances={{ .Values.database.instanceConnectionName }}=tcp:3306",
                     "-credential_file=/secrets/cloudsql/sql_credentials.json"]
