@@ -89,6 +89,10 @@ spec:
             - name: cloudsql-secrets-volume
               mountPath: /secrets/cloudsql
               readOnly: true
+      volumes:
+      - name: cloudsql-secrets-volume
+        secret:
+          secretName: cloudsql-instance-credentials
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
